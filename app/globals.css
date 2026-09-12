@@ -1,0 +1,287 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Palette — "ink & chalk". Dark-only by design.
+   ink    : deep blue-black paper
+   chalk  : warm off-white text
+   accent : luminous cyan  (structure, links, live things)
+   gold   : warm amber     (emphasis, achievement, highlights)
+   ------------------------------------------------------------------ */
+:root {
+  --ink: #05070b;
+  --ink-2: #090c12;
+  --ink-3: #0f131b;
+  --chalk: #ece8de;
+  --chalk-dim: #a3a39c;
+  --chalk-faint: #62656d;
+  --line: rgba(236, 232, 222, 0.08);
+  --line-strong: rgba(236, 232, 222, 0.2);
+  --accent: #6cd3f2;
+  --accent-deep: #1f95bb;
+  --gold: #f2bd63;
+  --gold-deep: #c4862a;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-chalk: var(--chalk);
+  --color-chalk-dim: var(--chalk-dim);
+  --color-chalk-faint: var(--chalk-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+  --font-display: var(--font-instrument-serif), "Times New Roman", serif;
+
+  --animate-marquee: marquee 70s linear infinite;
+  --animate-fade-up: fade-up 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: float 14s ease-in-out infinite;
+  --animate-pulse-soft: pulse-soft 3.2s ease-in-out infinite;
+  --animate-aurora-a: aurora-a 15s ease-in-out infinite;
+  --animate-aurora-b: aurora-b 19s ease-in-out infinite;
+  --animate-aurora-c: aurora-c 13s ease-in-out infinite;
+  --animate-aurora-d: aurora-d 17s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Hero aurora: four independent wander loops (see hero-background.tsx). Each
+   traces a loose triangular path (0% -> 33% -> 66% -> 100%) rather than a
+   simple back-and-forth, so the drift reads as organic, not mechanical.
+   transform + opacity only, so the compositor runs these off the main thread. */
+@keyframes aurora-a {
+  0%,
+  100% {
+    transform: translate3d(-10%, -6%, 0) scale(1);
+    opacity: 0.55;
+  }
+  33% {
+    transform: translate3d(12%, 8%, 0) scale(1.25);
+    opacity: 1;
+  }
+  66% {
+    transform: translate3d(6%, -10%, 0) scale(0.92);
+    opacity: 0.8;
+  }
+}
+
+@keyframes aurora-b {
+  0%,
+  100% {
+    transform: translate3d(8%, 8%, 0) scale(1.1);
+    opacity: 0.5;
+  }
+  33% {
+    transform: translate3d(-12%, -4%, 0) scale(0.85);
+    opacity: 1;
+  }
+  66% {
+    transform: translate3d(-4%, 10%, 0) scale(1.15);
+    opacity: 0.75;
+  }
+}
+
+@keyframes aurora-c {
+  0%,
+  100% {
+    transform: translate3d(0%, -8%, 0) scale(1);
+    opacity: 0.5;
+  }
+  33% {
+    transform: translate3d(-9%, 6%, 0) scale(1.2);
+    opacity: 1;
+  }
+  66% {
+    transform: translate3d(9%, 10%, 0) scale(0.88);
+    opacity: 0.7;
+  }
+}
+
+@keyframes aurora-d {
+  0%,
+  100% {
+    transform: translate3d(5%, 6%, 0) scale(1.15);
+    opacity: 0.45;
+  }
+  33% {
+    transform: translate3d(-10%, -8%, 0) scale(0.88);
+    opacity: 1;
+  }
+  66% {
+    transform: translate3d(-2%, 9%, 0) scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ink);
+  color: var(--chalk);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* film grain over everything — gives the flat dark surface some tooth */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+* {
+  scrollbar-color: var(--line-strong) transparent;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ------------------------------------------------------------------
+   KaTeX — inherit colour, no default block margins
+   ------------------------------------------------------------------ */
+.katex {
+  color: inherit;
+  font-size: 1.06em;
+}
+
+.katex-display {
+  margin: 0;
+  text-align: left;
+}
+
+.katex-display > .katex {
+  text-align: left;
+}
+
+/* ------------------------------------------------------------------
+   Utilities
+   ------------------------------------------------------------------ */
+.mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.glow-text {
+  text-shadow: 0 0 48px rgba(108, 211, 242, 0.22);
+}
+
+.glass {
+  background: linear-gradient(180deg, rgba(236, 232, 222, 0.035), rgba(236, 232, 222, 0.012));
+}
+
+.corner-brackets::before,
+.corner-brackets::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: var(--accent);
+  border-style: solid;
+  opacity: 0.7;
+}
+
+.corner-brackets::before {
+  top: 0;
+  left: 0;
+  border-width: 1.5px 0 0 1.5px;
+}
+
+.corner-brackets::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
